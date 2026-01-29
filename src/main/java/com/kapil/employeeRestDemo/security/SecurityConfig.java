@@ -1,5 +1,6 @@
 package com.kapil.employeeRestDemo.security;
 
+import com.kapil.employeeRestDemo.dto.ROLE;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -26,7 +27,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/user/**").permitAll()
+                        auth.requestMatchers("/api/user/**").hasAuthority(ROLE.ADMIN.name())
                                 .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

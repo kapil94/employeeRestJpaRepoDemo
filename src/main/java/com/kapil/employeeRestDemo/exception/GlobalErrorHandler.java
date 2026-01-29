@@ -51,4 +51,26 @@ public class GlobalErrorHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(error);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<Map<String,Object>> handleInvalidRoleException(InvalidRoleException exception){
+        Map<String,Object> error = new HashMap<>();
+        error.put("errorMessage",exception.getErrorMessage());
+        error.put("errorStatus", exception.getErrorStatus());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(error);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Map<String,Object>> handleDuplicateUserException(DuplicateUserException exception){
+        Map<String,Object> error = new HashMap<>();
+        error.put("errorMessage",exception.getErrorMessage());
+        error.put("errorStatus", exception.getErrorStatus());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(error);
+    }
 }
