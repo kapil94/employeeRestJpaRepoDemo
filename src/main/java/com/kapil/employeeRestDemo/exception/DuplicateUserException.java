@@ -1,27 +1,10 @@
 package com.kapil.employeeRestDemo.exception;
 
-public class DuplicateUserException extends RuntimeException {
-    private String errorMessage;
-    private int errorStatus;
+import org.springframework.http.HttpStatus;
 
-    public DuplicateUserException(String errorMessage, int errorStatus){
-        this.errorMessage = errorMessage;
-        this.errorStatus = errorStatus;
-    }
+public class DuplicateUserException extends BaseException {
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    public int getErrorStatus() {
-        return errorStatus;
-    }
-
-    public void setErrorStatus(int errorStatus) {
-        this.errorStatus = errorStatus;
+    public DuplicateUserException() {
+        super("User already exist!", HttpStatus.BAD_REQUEST);
     }
 }

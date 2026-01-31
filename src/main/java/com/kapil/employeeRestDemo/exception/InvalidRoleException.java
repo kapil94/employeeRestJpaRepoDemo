@@ -1,27 +1,10 @@
 package com.kapil.employeeRestDemo.exception;
 
-public class InvalidRoleException extends RuntimeException{
-    private String errorMessage;
-    private int errorStatus;
+import org.springframework.http.HttpStatus;
 
-    public InvalidRoleException(String errorMessage, int errorStatus){
-        this.errorMessage = errorMessage;
-        this.errorStatus = errorStatus;
-    }
+public class InvalidRoleException extends BaseException{
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    public int getErrorStatus() {
-        return errorStatus;
-    }
-
-    public void setErrorStatus(int errorStatus) {
-        this.errorStatus = errorStatus;
+    public InvalidRoleException() {
+        super("Invalid role passed", HttpStatus.BAD_REQUEST);
     }
 }

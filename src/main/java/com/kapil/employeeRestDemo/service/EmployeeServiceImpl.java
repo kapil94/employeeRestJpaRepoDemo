@@ -3,7 +3,6 @@ package com.kapil.employeeRestDemo.service;
 import com.kapil.employeeRestDemo.dao.EmployeeRepository;
 import com.kapil.employeeRestDemo.exception.EmployeeIdNotRequiredException;
 import com.kapil.employeeRestDemo.exception.EmployeeNotFoundException;
-import com.kapil.employeeRestDemo.exception.EmployeeWithLastNameNotFoundException;
 import com.kapil.employeeRestDemo.model.Employee;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService{
                             return emp;
                         }
                 )
-                .orElseThrow( ()-> new EmployeeNotFoundException("Employee with id "+id+" does not exist", HttpStatus.NOT_FOUND.value()));
+                .orElseThrow( ()-> new EmployeeNotFoundException());
     }
 
     @Transactional
@@ -53,7 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         Optional<Employee> optional = employeeRepository.findById(id);
         optional.ifPresentOrElse(employeeRepository::delete,
                 () -> {
-                    throw new EmployeeNotFoundException("Employee with id " + id + " does not exist", HttpStatus.NOT_FOUND.value());
+                    throw new EmployeeNotFoundException();
                 }
         );
     }
@@ -65,7 +64,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         int deletedRows= employeeRepository.deleteEmployeeByLastName(lastName);
 
         if(deletedRows==0){
-            throw new EmployeeWithLastNameNotFoundException("Employee with lastName :"+lastName+" is not found", HttpStatus.NOT_FOUND.value());
+            throw new EmployeeNotFoundException();
         }
 
         return deletedRows;
@@ -92,9 +91,7 @@ public class EmployeeServiceImpl implements EmployeeService{
                 {
                     employee.setEmail(email);
                     return employee;
-                    }).orElseThrow(()-> {
-            throw new EmployeeNotFoundException("Employee with id " + id + " does not exist", HttpStatus.NOT_FOUND.value());
-        });
+                    }).orElseThrow(EmployeeNotFoundException::new);
     }
 
     @Transactional
@@ -103,12 +100,12 @@ public class EmployeeServiceImpl implements EmployeeService{
         Optional<Employee> optional = employeeRepository.findById(id);
 
         if (patchPayload.containsKey("id")) {
-            throw new EmployeeIdNotRequiredException("Employee id not required in payload", HttpStatus.BAD_REQUEST.value());
+            throw new EmployeeIdNotRequiredException();
         }
 
         return optional.map(employee -> {
             objectMapper.updateValue(optional.get(), patchPayload);
             return employee;
-        }).orElseThrow(()-> new EmployeeNotFoundException("Employee with id " + id + " does not exist", HttpStatus.NOT_FOUND.value()));
+        }).orElseThrow(EmployeeNotFoundException::new);
     }
 }

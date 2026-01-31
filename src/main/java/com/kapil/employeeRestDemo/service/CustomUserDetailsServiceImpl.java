@@ -60,7 +60,7 @@ public class CustomUserDetailsServiceImpl implements org.springframework.securit
     @Override
     public void addUser(UserRecord record) {
 
-            ROLE role = parseRole(record.role().name());
+            ROLE role = parseRole(record.role());
             isUserAvailable(record.username());
 
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -81,16 +81,16 @@ public class CustomUserDetailsServiceImpl implements org.springframework.securit
 
     private ROLE parseRole(String role){
         try {
-            return ROLE.valueOf(role);
+            return ROLE.valueOf(role.toUpperCase());
         } catch (IllegalArgumentException ex){
-            throw new InvalidRoleException("Invalid role passed ", HttpStatus.BAD_REQUEST.value());
+            throw new InvalidRoleException();
         }
     }
 
     private void isUserAvailable(String user){
 
         if(userRepository.findUserByUserName(user)!=null){
-            throw new DuplicateUserException("User is already added",HttpStatus.BAD_REQUEST.value());
+            throw new DuplicateUserException();
         }
     }
 }

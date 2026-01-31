@@ -1,6 +1,6 @@
 package com.kapil.employeeRestDemo.rest;
 
-import com.kapil.employeeRestDemo.dto.EmailDTO;
+import com.kapil.employeeRestDemo.dto.Email;
 import com.kapil.employeeRestDemo.model.Employee;
 import com.kapil.employeeRestDemo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,10 +55,10 @@ public class EmployeeController {
     }
 
     @PatchMapping("/employees/{id}")
-    public ResponseEntity<Employee> updateEmployeeEmail(@PathVariable int id, @RequestBody EmailDTO emailDTO){
+    public ResponseEntity<Employee> updateEmployeeEmail(@PathVariable int id, @RequestBody Email email){
         return
                 ResponseEntity.ok(employeeService
-                        .updateEmailOfEmployee(id,emailDTO.getEmail()));
+                        .updateEmailOfEmployee(id, email.getEmail()));
     }
 
     @PutMapping("/employees/{employeeId}")

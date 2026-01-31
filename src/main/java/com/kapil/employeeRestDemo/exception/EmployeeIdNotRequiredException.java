@@ -1,28 +1,10 @@
 package com.kapil.employeeRestDemo.exception;
 
-public class EmployeeIdNotRequiredException extends RuntimeException{
+import org.springframework.http.HttpStatus;
 
-    private String errorMessage;
-    private int errorStatus;
+public class EmployeeIdNotRequiredException extends BaseException{
 
-    public EmployeeIdNotRequiredException(String errorMessage, int errorStatus){
-        this.errorMessage = errorMessage;
-        this.errorStatus = errorStatus;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    public int getErrorStatus() {
-        return errorStatus;
-    }
-
-    public void setErrorStatus(int errorStatus) {
-        this.errorStatus = errorStatus;
+    public EmployeeIdNotRequiredException() {
+        super("Id is not required in payload", HttpStatus.BAD_REQUEST);
     }
 }
