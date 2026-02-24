@@ -5,5 +5,4 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface CustomUserDetailsService  {
 
-    void addUser(UserRecord record);
 }

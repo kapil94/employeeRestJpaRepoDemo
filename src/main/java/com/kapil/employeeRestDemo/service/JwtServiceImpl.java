@@ -2,7 +2,10 @@ package com.kapil.employeeRestDemo.service;
 
 import com.kapil.employeeRestDemo.model.JwtHeader;
 import com.kapil.employeeRestDemo.model.JwtPayload;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
 
@@ -52,7 +55,7 @@ public class JwtServiceImpl {
         }
     }
 
-    private String sign(String data) throws Exception {
+    protected String sign(String data) throws Exception {
         Mac mac = Mac.getInstance("HmacSHA256");
         SecretKeySpec keySpec =
                 new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
@@ -66,5 +69,4 @@ public class JwtServiceImpl {
                 .withoutPadding()
                 .encodeToString(bytes);
     }
-
 }

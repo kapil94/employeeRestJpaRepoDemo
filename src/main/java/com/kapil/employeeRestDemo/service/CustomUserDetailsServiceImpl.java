@@ -10,8 +10,11 @@ import com.kapil.employeeRestDemo.model.AuthorityEntity;
 import com.kapil.employeeRestDemo.model.AuthorityId;
 import com.kapil.employeeRestDemo.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CustomUserDetailsServiceImpl implements org.springframework.security.core.userdetails.UserDetailsService, CustomUserDetailsService {
+public class CustomUserDetailsServiceImpl implements org.springframework.security.core.userdetails.UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -46,51 +49,12 @@ public class CustomUserDetailsServiceImpl implements org.springframework.securit
 
         System.out.println("role:"+authorities);
         System.out.println("username: "+userEntity.getUsername()+" password: "+userEntity.getPassword());
+
         return org.springframework.security.core.userdetails.User
                 .withUsername(userEntity.getUsername())
                 .password(userEntity.getPassword())
                 .authorities(authorities)
                 .disabled(!userEntity.getEnabled())
                 .build();
-    }
-
-
-
-    @Override
-    public void addUser(UserRecord record) {
-
-            ROLE role = parseRole(record.role());
-            isUserAvailable(record.username());
-
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            UserEntity userEntity = new UserEntity();
-
-            userEntity.setUsername(record.username());
-            userEntity.setPassword(passwordEncoder.encode(record.password()));
-            userEntity.setEnabled(record.enabled());
-
-            userRepository.save(userEntity);
-            AuthorityEntity authorityEntity = new AuthorityEntity();
-
-            authorityEntity.setUser(userEntity);
-            authorityEntity.setId(new AuthorityId(record.username(), role.name()));
-
-            authorityRepository.save(authorityEntity);
-    }
-
-
-    private ROLE parseRole(String role){
-        try {
-            return ROLE.valueOf(role.toUpperCase());
-        } catch (IllegalArgumentException ex){
-            throw new InvalidRoleException();
-        }
-    }
-
-    private void isUserAvailable(String user){
-
-        if(userRepository.findUserByUserName(user)!=null){
-            throw new DuplicateUserException();
-        }
     }
 }
