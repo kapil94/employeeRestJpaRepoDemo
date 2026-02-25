@@ -33,6 +33,7 @@ public class JwtServiceImpl {
         this.algo = algo;
     }
 
+    // Generate token from Header, Payload and Signature
     public String generateToken(String username, List<String> roles){
         try {
 
@@ -55,6 +56,7 @@ public class JwtServiceImpl {
         }
     }
 
+    // Hmac Algo for signature creation
     protected String sign(String data) throws Exception {
         Mac mac = Mac.getInstance("HmacSHA256");
         SecretKeySpec keySpec =
@@ -64,6 +66,7 @@ public class JwtServiceImpl {
         return encode(signatureBytes);
     }
 
+    //Utility method for encoding
     private String encode(byte[] bytes) {
         return Base64.getUrlEncoder()
                 .withoutPadding()

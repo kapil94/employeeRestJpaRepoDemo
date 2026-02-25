@@ -22,11 +22,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
     private JwtServiceImpl jwtService;
+    private CustomUserDetailsServiceImpl userDetailsService;
 
     @Autowired
-    private CustomUserDetailsServiceImpl userDetailsService;
+    public SecurityConfig(JwtServiceImpl jwtService, CustomUserDetailsServiceImpl userDetailsService){
+        this.jwtService = jwtService;
+        this.userDetailsService=userDetailsService;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
